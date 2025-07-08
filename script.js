@@ -1,175 +1,149 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Elementos del DOM
-    const newTaskInput = document.getElementById('new-task-input');
-    const addTaskBtn = document.getElementById('add-task-btn');
-    const taskList = document.getElementById('task-list');
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const tasksCountSpan = document.getElementById('tasks-count');
-    const clearCompletedBtn = document.getElementById('clear-completed-btn');
+// script.js
 
-    // Estado de las tareas
-    let tasks = []; // Array para almacenar las tareas: [{ id: 1, text: "Tarea 1", completed: false }]
-    let currentFilter = 'all'; // all, pending, completed
+// --- 1. Seleccionar elementos del DOM ---
+const generateBtn = document.getElementById('generatePaletteBtn');
+const colorPaletteContainer = document.querySelector('.color-palette-container');
+const typeButtons = document.querySelectorAll('.type-btn');
+const footerText = document.querySelector('.footer-section p');
 
-    // --- Funciones de Gestión de Tareas ---
+// --- 2. Variables de estado y configuración ---
+const NUM_COLORS = 5; // Número de colores en la paleta
+let currentPalette = []; // Almacena los colores actuales de la paleta
+let lockedColors = new Array(NUM_COLORS).fill(false); // Estado de bloqueo para cada color
+let activePaletteType = 'random'; // Tipo de paleta activa (por defecto 'random' si no se selecciona nada)
 
-    // 1. Cargar tareas desde localStorage
-    function loadTasks() {
-        const storedTasks = localStorage.getItem('tasks');
-        if (storedTasks) {
-            tasks = JSON.parse(storedTasks);
+// --- 3. Funciones de Utilidad de Color ---
+
+// Función para generar un color HEX aleatorio
+function getRandomHexColor() {
+    return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+}
+
+// Función para convertir HEX a RGB
+function hexToRgb(hex) {
+    let r = 0, g = 0, b = 0;
+    // Manejar formato corto (e.g., #FFF)
+    if (hex.length === 4) {
+        r = parseInt(hex[1] + hex[1], 16);
+        g = parseInt(hex[2] + hex[2], 16);
+        b = parseInt(hex[3] + hex[3], 16);
+    } else if (hex.length === 7) {
+        r = parseInt(hex.substring(1, 3), 16);
+        g = parseInt(hex.substring(3, 5), 16);
+        b = parseInt(hex.substring(5, 7), 16);
+    }
+    return { r, g, b };
+}
+
+// Función para calcular la luminosidad de un color (para determinar si el texto debe ser blanco o negro)
+function getLuminance(hex) {
+    const { r, g, b } = hexToRgb(hex);
+    // Fórmula de luminosidad relativa (perceptual)
+    const a = [r, g, b].map(v => {
+        v /= 255;
+        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+}
+
+// Función para obtener el color de texto de contraste (blanco o negro)
+function getContrastTextColor(hex) {
+    return getLuminance(hex) > 0.5 ? '#333' : '#FFF'; // Si es claro, texto oscuro; si es oscuro, texto claro
+}
+
+// --- 4. Funciones de Renderizado y Lógica Principal ---
+
+// Función para generar una paleta de colores (inicialmente aleatoria)
+function generatePalette() {
+    colorPaletteContainer.innerHTML = ''; // Limpiar paleta anterior
+
+    for (let i = 0; i < NUM_COLORS; i++) {
+        let color;
+        if (lockedColors[i] && currentPalette[i]) {
+            color = currentPalette[i]; // Mantener el color bloqueado
+        } else {
+            // Aquí es donde la lógica para tipos de paleta se volvería más compleja.
+            // Por ahora, solo generamos colores aleatorios.
+            // Para "monocromática", "análoga", etc., se necesitaría una librería como 'chroma.js'
+            // o funciones matemáticas de teoría del color.
+            color = getRandomHexColor();
         }
-    }
+        currentPalette[i] = color; // Actualizar el color en la paleta actual
 
-    // 2. Guardar tareas en localStorage
-    function saveTasks() {
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-    }
+        const textColor = getContrastTextColor(color); // Obtener color de texto de contraste
 
-    // 3. Renderizar (dibujar) las tareas en la UI
-    function renderTasks() {
-        taskList.innerHTML = ''; // Limpiar lista actual
-        let pendingTasksCount = 0;
+        const colorBox = document.createElement('div');
+        colorBox.classList.add('color-box');
+        colorBox.style.backgroundColor = color;
+        // Establecer el estado de bloqueo para el CSS
+        if (lockedColors[i]) {
+            colorBox.classList.add('locked');
+        }
 
-        tasks.forEach(task => {
-            if (currentFilter === 'pending' && task.completed) return;
-            if (currentFilter === 'completed' && !task.completed) return;
+        colorBox.innerHTML = `
+            <span class="hex-code" style="color: ${textColor};">${color}</span>
+            <i class="fas ${lockedColors[i] ? 'fa-lock' : 'fa-lock-open'} lock-icon" style="color: ${textColor === '#333' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'};"></i>
+        `;
 
-            const listItem = document.createElement('li');
-            listItem.classList.add('task-item');
-            if (task.completed) {
-                listItem.classList.add('completed');
-            }
-            listItem.dataset.id = task.id; // Almacenar el ID de la tarea en el DOM
+        colorPaletteContainer.appendChild(colorBox);
 
-            listItem.innerHTML = `
-                <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''}>
-                <span class="task-text">${task.text}</span>
-                <div class="task-actions">
-                    <button class="edit-btn" aria-label="Editar tarea">
-                        <span class="material-icons">edit</span>
-                    </button>
-                    <button class="delete-btn" aria-label="Eliminar tarea">
-                        <span class="material-icons">delete</span>
-                    </button>
-                </div>
-            `;
-            taskList.appendChild(listItem);
+        // Añadir Event Listeners a los nuevos elementos
+        const hexCodeSpan = colorBox.querySelector('.hex-code');
+        const lockIcon = colorBox.querySelector('.lock-icon');
 
-            if (!task.completed) {
-                pendingTasksCount++;
-            }
+        // Copiar HEX al clickear
+        hexCodeSpan.addEventListener('click', () => {
+            navigator.clipboard.writeText(color).then(() => {
+                // Pequeño feedback visual
+                const originalText = hexCodeSpan.textContent;
+                hexCodeSpan.textContent = '¡Copiado!';
+                setTimeout(() => {
+                    hexCodeSpan.textContent = originalText;
+                }, 1000);
+            }).catch(err => {
+                console.error('Error al copiar el texto: ', err);
+            });
         });
 
-        updateTasksCount(pendingTasksCount);
-    }
-
-    // 4. Añadir una nueva tarea
-    function addTask() {
-        const taskText = newTaskInput.value.trim();
-        if (taskText === '') {
-            alert('Por favor, ingresa una tarea.');
-            return;
-        }
-
-        const newTask = {
-            id: Date.now(), // ID único basado en el timestamp
-            text: taskText,
-            completed: false
-        };
-
-        tasks.push(newTask);
-        saveTasks();
-        newTaskInput.value = ''; // Limpiar input
-        renderTasks(); // Volver a renderizar la lista
-    }
-
-    // 5. Marcar/Desmarcar tarea como completada
-    function toggleTaskCompleted(id) {
-        const taskIndex = tasks.findIndex(task => task.id == id);
-        if (taskIndex !== -1) {
-            tasks[taskIndex].completed = !tasks[taskIndex].completed;
-            saveTasks();
-            renderTasks();
-        }
-    }
-
-    // 6. Editar una tarea
-    function editTask(id, currentTextElement) {
-        const taskIndex = tasks.findIndex(task => task.id == id);
-        if (taskIndex !== -1) {
-            const newText = prompt('Editar tarea:', tasks[taskIndex].text);
-            if (newText !== null && newText.trim() !== '') {
-                tasks[taskIndex].text = newText.trim();
-                saveTasks();
-                renderTasks(); // O simplemente actualizar el texto del elemento actual
-            }
-        }
-    }
-
-    // 7. Eliminar una tarea
-    function deleteTask(id) {
-        if (confirm('¿Estás seguro de que quieres eliminar esta tarea?')) {
-            tasks = tasks.filter(task => task.id != id);
-            saveTasks();
-            renderTasks();
-        }
-    }
-
-    // 8. Limpiar tareas completadas
-    function clearCompletedTasks() {
-        tasks = tasks.filter(task => !task.completed);
-        saveTasks();
-        renderTasks();
-    }
-
-    // 9. Actualizar el contador de tareas pendientes
-    function updateTasksCount(count) {
-        tasksCountSpan.textContent = `${count} ${count === 1 ? 'tarea pendiente' : 'tareas pendientes'}`;
-    }
-
-    // --- Event Listeners ---
-
-    // Añadir tarea al hacer clic o presionar Enter
-    addTaskBtn.addEventListener('click', addTask);
-    newTaskInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            addTask();
-        }
-    });
-
-    // Manejar clics en la lista de tareas (delegación de eventos)
-    taskList.addEventListener('click', (e) => {
-        const target = e.target;
-        const listItem = target.closest('.task-item'); // Obtiene el <li> más cercano
-
-        if (!listItem) return; // Si el clic no fue dentro de un item de tarea
-
-        const taskId = listItem.dataset.id;
-
-        if (target.classList.contains('task-checkbox')) {
-            toggleTaskCompleted(taskId);
-        } else if (target.closest('.edit-btn')) {
-            editTask(taskId, listItem.querySelector('.task-text'));
-        } else if (target.closest('.delete-btn')) {
-            deleteTask(taskId);
-        }
-    });
-
-    // Filtros de tareas
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterBtns.forEach(fBtn => fBtn.classList.remove('active'));
-            btn.classList.add('active');
-            currentFilter = btn.dataset.filter;
-            renderTasks(); // Volver a renderizar con el nuevo filtro
+        // Bloquear/Desbloquear color
+        lockIcon.addEventListener('click', () => {
+            lockedColors[i] = !lockedColors[i]; // Invertir el estado de bloqueo
+            colorBox.classList.toggle('locked', lockedColors[i]); // Añadir/Quitar clase CSS
+            lockIcon.classList.toggle('fa-lock', lockedColors[i]);
+            lockIcon.classList.toggle('fa-lock-open', !lockedColors[i]);
+            console.log(`Color ${color} ${lockedColors[i] ? 'bloqueado' : 'desbloqueado'}`);
         });
+    }
+}
+
+// --- 5. Event Listeners Globales ---
+
+// Botón de Generar Paleta
+generateBtn.addEventListener('click', generatePalette);
+
+// Botones de tipo de paleta
+typeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Remover 'active' de todos
+        typeButtons.forEach(btn => btn.classList.remove('active'));
+        // Añadir 'active' al clickeado
+        button.classList.add('active');
+        activePaletteType = button.dataset.type; // Obtener el tipo de paleta del atributo data
+        console.log(`Tipo de paleta seleccionado: ${activePaletteType}`);
+
+        // AQUI: Si tuvieras la lógica para generar diferentes tipos de paletas,
+        // llamarías a una función específica aquí, o pasarías 'activePaletteType'
+        // a 'generatePalette()' para que se encargara.
+        // Por ahora, solo genera aleatoriamente, independientemente del tipo seleccionado.
+        generatePalette();
     });
-
-    // Limpiar completadas
-    clearCompletedBtn.addEventListener('click', clearCompletedTasks);
-
-    // --- Inicialización ---
-    loadTasks(); // Cargar tareas al inicio
-    renderTasks(); // Renderizar las tareas cargadas
 });
+
+// --- 6. Inicialización ---
+
+// Cargar una paleta inicial al cargar la página
+window.onload = () => {
+    generatePalette();
+    // Actualizar el texto del footer (cambiar "OpenAI" por tu nombre)
+    footerText.innerHTML = 'Hecho por <strong>Tu Nombre</strong>'; // <--- ¡IMPORTANTE! Cambia "Tu Nombre"
+};
