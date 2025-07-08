@@ -8,50 +8,75 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="background-gradient"></div> <header class="header-section">
+    <div class="background-gradient"></div>
+
+    <header class="header-section">
         <h1>Generador de Paletas de Colores UI</h1>
         <p>Crea paletas de colores perfectas para tus proyectos de diseño y desarrollo web.</p>
         <button id="generatePaletteBtn" class="generate-btn">Generar Nueva Paleta</button>
     </header>
 
     <main class="color-palette-container">
-        <div class="color-box" data-locked="false">
-            <span class="hex-code">#F9C74F</span>
-            <i class="fas fa-lock-open lock-icon"></i>
-        </div>
-        <div class="color-box" data-locked="false">
-            <span class="hex-code">#90BE6D</span>
-            <i class="fas fa-lock-open lock-icon"></i>
-        </div>
-        <div class="color-box" data-locked="false">
-            <span class="hex-code">#43AAA8B</span>
-            <i class="fas fa-lock-open lock-icon"></i>
-        </div>
-        <div class="color-box" data-locked="false">
-            <span class="hex-code">#577590</span>
-            <i class="fas fa-lock-open lock-icon"></i>
-        </div>
-        <div class="color-box" data-locked="false">
-            <span class="hex-code">#2B2D42</span>
-            <i class="fas fa-lock-open lock-icon"></i>
-        </div>
-    </main>
+        </main>
 
     <div class="palette-type-controls">
-        <button class="type-btn active" data-type="monochromatic">Monocromática</button>
+        <button class="type-btn active" data-type="random">Aleatoria</button>
+        <button class="type-btn" data-type="monochromatic">Monocromática</button>
         <button class="type-btn" data-type="analogous">Análoga</button>
         <button class="type-btn" data-type="complementary">Complementaria</button>
         <button class="type-btn" data-type="triadic">Triádica</button>
     </div>
 
+    <section class="skills-section">
+        <h2>Mis Habilidades Técnicas</h2>
+        <p class="skills-subtitle">Tecnologías y herramientas que utilizo para construir experiencias web.</p>
+        
+        <div class="skills-grid-container">
+            <div class="skill-card">
+                <i class="devicon-html5-plain colored"></i>
+                <span>HTML</span>
+            </div>
+            <div class="skill-card">
+                <i class="devicon-css3-plain colored"></i>
+                <span>CSS</span>
+            </div>
+            <div class="skill-card">
+                <i class="devicon-javascript-plain colored"></i>
+                <span>JavaScript</span>
+            </div>
+            <div class="skill-card">
+                <i class="devicon-react-original colored"></i>
+                <span>React</span>
+            </div>
+            <div class="skill-card">
+                <i class="devicon-nodejs-plain colored"></i>
+                <span>Node.js</span>
+            </div>
+            <div class="skill-card">
+                <i class="devicon-python-plain colored"></i>
+                <span>Python</span>
+            </div>
+            <div class="skill-card">
+                <i class="devicon-git-plain colored"></i>
+                <span>Git</span>
+            </div>
+            <div class="skill-card">
+                <i class="devicon-figma-plain colored"></i>
+                <span>Figma</span>
+            </div>
+            </div>
+    </section>
+
     <footer class="footer-section">
-        <p>Hecho por **Saúl Hernández**</p>
+        <p>Hecho por <strong>Saúl Hernández</strong></p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
