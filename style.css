@@ -4,7 +4,7 @@
 :root {
     --primary-text-color: #333;
     --secondary-text-color: #666;
-    --button-bg-color: #2b2d42; /* Azul oscuro del diseño */
+    --button-bg-color: #3f51b5; /* Azul que concuerda con el diseño de ChatGPT para botones y accents */
     --button-text-color: #ffffff;
     --card-bg-color: #ffffff;
     --border-radius: 12px;
@@ -13,6 +13,8 @@
     --gradient-start: #FFD4EE; /* Rosa claro del fondo */
     --gradient-middle: #D0E4FF; /* Azul claro del fondo */
     --gradient-end: #FFF7D4; /* Amarillo claro del fondo */
+    --dark-bg-color: #2b2d42; /* Color oscuro para el JSON y otros elementos */
+    --dark-text-color: #f0f0f0;
 }
 
 /* Estilos globales y reseteo básico */
@@ -47,7 +49,7 @@ body {
 }
 
 
-/* Sección del encabezado (Header) */
+/* Sección del encabezado (Hero) */
 .header-section {
     text-align: center;
     padding: 60px 20px 40px; /* Más padding arriba y abajo */
@@ -71,8 +73,8 @@ body {
     margin: 0 auto 30px; /* Centra el párrafo y añade margen inferior */
 }
 
-/* Botón Generar Nueva Paleta */
-.generate-btn {
+/* Botón Generar Nueva Paleta (Estilo general para botones primarios) */
+.generate-btn, .action-btn, .explore-btn {
     background-color: var(--button-bg-color);
     color: var(--button-text-color);
     border: none;
@@ -83,104 +85,136 @@ body {
     cursor: pointer;
     transition: transform var(--transition-speed), box-shadow var(--transition-speed);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Sombra para el botón */
+    text-decoration: none; /* Para el botón 'Explorar' */
+    display: inline-block; /* Para el botón 'Explorar' */
 }
 
-.generate-btn:hover {
+.generate-btn:hover, .action-btn:hover, .explore-btn:hover {
     transform: translateY(-3px); /* Pequeño efecto al pasar el ratón */
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Contenedor principal de la paleta de colores */
-.color-palette-container {
-    display: flex;
-    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
-    justify-content: center;
-    gap: 25px; /* Espacio entre los bloques de color */
-    background-color: var(--card-bg-color); /* Fondo blanco de la tarjeta principal */
-    padding: 30px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    max-width: 1000px; /* Ancho máximo del contenedor de la paleta */
-    width: 90%; /* Ocupa el 90% del ancho disponible */
-    margin-top: 20px; /* Margen superior para separarlo del botón */
-    margin-bottom: 40px; /* Margen inferior para separarlo de los botones de tipo */
+/* --- Estilos para los Módulos de Herramientas (Grid Container) --- */
+.tools-grid-container {
+    display: grid;
+    /* Dos columnas para escritorio, se adaptará para tablet/móvil */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px; /* Espacio entre los módulos */
+    padding: 40px;
+    width: 95%; /* Ocupa casi todo el ancho */
+    max-width: 1200px; /* Ancho máximo */
+    margin-bottom: 60px; /* Espacio antes de la sección de habilidades */
 }
 
-/* Estilos para cada bloque de color individual */
+/* Estilo general para cada módulo de herramienta */
+.tool-module {
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.module-title {
+    font-size: 1.6em;
+    font-weight: 600;
+    color: var(--primary-text-color);
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+
+/* --- Módulo: Generador de Paletas de Colores UI --- */
+.color-palette-module {
+    /* Ocupa dos columnas al inicio en escritorio */
+    grid-column: span 2; 
+}
+
+.color-palette-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Asegura que el contenido ocupe el ancho del módulo */
+}
+
+.color-palette-display {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 25px; /* Espacio antes de los controles de tipo */
+    width: 100%;
+}
+
 .color-box {
-    width: 160px; /* Ancho fijo para cada tarjeta de color */
-    height: 200px; /* Alto fijo */
+    width: 150px; /* Ancho ajustado para el módulo */
+    height: 180px; /* Alto ajustado */
     border-radius: var(--border-radius);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     padding: 15px;
-    color: #fff; /* Color del texto dentro del cuadro (se ajustará con JS para contraste) */
+    color: #fff;
     font-weight: 600;
-    font-size: 1.1em;
-    cursor: pointer; /* Indica que es interactivo */
-    transition: transform var(--transition-speed); /* Transición para el hover */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Sombra ligera para los bloques de color */
-    position: relative; /* Para posicionar el icono del candado */
+    font-size: 1em;
+    cursor: pointer;
+    transition: transform var(--transition-speed);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    background-color: gray; /* Fallback */
 }
 
 .color-box:hover {
-    transform: translateY(-5px); /* Pequeño levantamiento al pasar el ratón */
+    transform: translateY(-5px);
 }
 
-/* Estilos para el código HEX dentro del bloque de color */
 .color-box .hex-code {
-    background-color: rgba(0, 0, 0, 0.2); /* Fondo semitransparente para el texto HEX */
+    background-color: rgba(0, 0, 0, 0.2);
     padding: 8px 12px;
     border-radius: 8px;
-    user-select: none; /* Evita que el texto sea seleccionable */
-    margin-top: auto; /* Empuja el hex-code hacia abajo */
-    margin-bottom: 10px; /* Espacio para el candado */
+    user-select: none;
+    margin-top: auto;
+    margin-bottom: 10px;
 }
 
-/* Icono de candado */
 .color-box .lock-icon {
     font-size: 1.3em;
     cursor: pointer;
-    margin-top: auto; /* Empuja el candado hacia abajo si el hex-code no está */
+    margin-top: auto;
     margin-bottom: 5px;
-    color: rgba(255, 255, 255, 0.7); /* Color por defecto del candado */
+    color: rgba(255, 255, 255, 0.7);
     transition: color var(--transition-speed);
 }
 
 .color-box .lock-icon:hover {
-    color: rgba(255, 255, 255, 1); /* Se ilumina al pasar el ratón */
+    color: rgba(255, 255, 255, 1);
 }
 
-/* Estilo para el candado cuando está bloqueado */
 .color-box.locked .lock-icon {
-    color: #fff; /* Candado blanco sólido cuando está bloqueado */
+    color: #fff;
 }
 
-
-/* Controles de tipo de paleta */
 .palette-type-controls {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Centra los botones */
-    gap: 15px; /* Espacio entre los botones de tipo */
-    margin-top: 20px;
-    margin-bottom: 60px; /* Espacio antes de la sección de habilidades */
-    width: 90%;
-    max-width: 1000px;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
 }
 
 .type-btn {
-    background-color: #f0f0f0; /* Fondo gris claro */
+    background-color: #f0f0f0;
     color: var(--secondary-text-color);
     border: 1px solid #ddd;
-    padding: 10px 20px;
-    border-radius: 30px; /* Bordes más redondeados tipo píldora */
-    font-size: 1em;
+    padding: 8px 15px; /* Más pequeño para que quepan */
+    border-radius: 30px;
+    font-size: 0.9em;
     cursor: pointer;
     transition: all var(--transition-speed);
-    white-space: nowrap; /* Evita que el texto se rompa */
+    white-space: nowrap;
 }
 
 .type-btn:hover {
@@ -189,23 +223,283 @@ body {
 }
 
 .type-btn.active {
-    background-color: var(--button-bg-color); /* Color oscuro para el activo */
+    background-color: var(--button-bg-color);
     color: var(--button-text-color);
     border-color: var(--button-bg-color);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* --- NUEVA SECCIÓN: Mis Habilidades Técnicas --- */
+/* --- Módulo: Herramienta del Día --- */
+.daily-tool-module {
+    padding-top: 50px; /* Más espacio arriba para centrar */
+    padding-bottom: 50px; /* Más espacio abajo */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrar verticalmente */
+    align-items: center;
+}
+
+.daily-tool-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 250px; /* Ancho máximo para la tarjeta */
+}
+
+.daily-tool-card .tool-icon {
+    font-size: 5em; /* Tamaño grande para el icono */
+    color: #007bff; /* Color de CodePen o un azul genérico */
+    margin-bottom: 10px;
+}
+.daily-tool-card h4 {
+    font-size: 1.4em;
+    font-weight: 600;
+    margin: 0;
+    color: var(--primary-text-color);
+}
+.daily-tool-card p {
+    font-size: 0.9em;
+    color: var(--secondary-text-color);
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+.daily-tool-card .explore-btn {
+    padding: 10px 25px; /* Botón más pequeño */
+    font-size: 1em;
+    border-radius: 8px;
+}
+
+
+/* --- Módulo: Conversor de Unidades CSS --- */
+.css-converter-module {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espacio entre los grupos de input */
+}
+
+.converter-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    justify-content: space-between; /* Espacia label e input */
+}
+
+.converter-input-group label {
+    font-size: 1em;
+    font-weight: 500;
+    color: var(--primary-text-color);
+    flex-basis: 30%; /* Ajusta el ancho de la etiqueta */
+    text-align: right;
+}
+
+.converter-input-group input[type="number"] {
+    flex-grow: 1; /* El input ocupa el resto del espacio */
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    color: var(--primary-text-color);
+    background-color: #f9f9f9;
+    transition: border-color var(--transition-speed);
+}
+
+.converter-input-group input[type="number"]:focus {
+    outline: none;
+    border-color: var(--button-bg-color);
+}
+
+.css-converter-module .action-btn {
+    margin-top: 15px;
+    width: auto;
+    padding: 10px 25px;
+    font-size: 0.95em;
+    align-self: center; /* Centrar el botón */
+}
+
+
+/* --- Módulo: Formateador / Validador JSON --- */
+.json-tool-module {
+    padding: 25px;
+}
+
+#json-input {
+    width: calc(100% - 20px); /* Ajusta por padding */
+    min-height: 200px;
+    padding: 10px;
+    border: 1px solid var(--dark-bg-color); /* Borde oscuro */
+    border-radius: 8px;
+    font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; /* Fuente monoespaciada para código */
+    font-size: 0.9em;
+    background-color: var(--dark-bg-color); /* Fondo oscuro */
+    color: var(--dark-text-color); /* Texto claro */
+    resize: vertical; /* Permitir redimensionar verticalmente */
+    margin-bottom: 20px;
+    transition: border-color var(--transition-speed);
+}
+
+#json-input::placeholder {
+    color: #888;
+}
+
+#json-input:focus {
+    outline: none;
+    border-color: var(--button-bg-color);
+}
+
+.json-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    justify-content: center;
+    width: 100%;
+}
+
+.json-buttons .action-btn {
+    padding: 10px 25px;
+    font-size: 0.95em;
+}
+
+.json-output-area {
+    width: calc(100% - 20px);
+    max-height: 200px; /* Altura máxima para el output */
+    overflow-y: auto; /* Scroll si el contenido es grande */
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #f0f0f0; /* Fondo claro para el output */
+    color: var(--primary-text-color);
+    font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    font-size: 0.9em;
+    text-align: left; /* Asegura que el texto formateado se alinee a la izquierda */
+    white-space: pre-wrap; /* Mantiene saltos de línea y espacios */
+    word-break: break-word; /* Rompe palabras largas */
+}
+
+/* Estilo para mensajes de error */
+.json-output-area.error {
+    color: #d32f2f; /* Rojo para errores */
+    border-color: #d32f2f;
+    background-color: #ffebee;
+}
+
+/* --- Módulo: Animador de Fondos CSS --- */
+.css-animator-module {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.animator-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.control-group label {
+    font-size: 1em;
+    font-weight: 500;
+    color: var(--primary-text-color);
+    flex-basis: 30%;
+    text-align: right;
+}
+
+.control-group input[type="number"],
+.control-group select {
+    flex-grow: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    color: var(--primary-text-color);
+    background-color: #f9f9f9;
+    transition: border-color var(--transition-speed);
+}
+
+.control-group input[type="range"] {
+    flex-grow: 1;
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    height: 8px;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity var(--transition-speed);
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--button-bg-color);
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.control-group input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--button-bg-color);
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.control-group span { /* Para el display del ángulo */
+    font-size: 0.9em;
+    color: var(--secondary-text-color);
+}
+
+.animated-bg-preview {
+    width: 100%;
+    height: 150px; /* Tamaño del preview */
+    border-radius: 8px;
+    margin: 20px 0;
+    border: 1px solid #eee;
+    background-size: 400% 400%; /* Para el efecto de movimiento del degradado */
+    animation: gradientMove 10s ease infinite; /* Animación por defecto */
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.css-animator-module .action-btn {
+    margin-top: 10px;
+    width: auto;
+    padding: 10px 25px;
+    font-size: 0.95em;
+    align-self: center;
+}
+
+
+/* --- Sección de Mis Habilidades Técnicas --- */
 .skills-section {
     text-align: center;
-    padding: 60px 20px; /* Padding para separar de las otras secciones */
-    margin-bottom: 40px; /* Espacio antes del footer */
+    padding: 60px 20px;
+    margin-bottom: 40px;
     width: 90%;
     max-width: 1000px;
 }
 
 .skills-section h2 {
-    font-size: 2.5em; /* Ligeramente más pequeño que el título principal */
+    font-size: 2.5em;
     font-weight: 700;
     color: var(--primary-text-color);
     margin-bottom: 10px;
@@ -214,22 +508,20 @@ body {
 .skills-section .skills-subtitle {
     font-size: 1.1em;
     color: var(--secondary-text-color);
-    margin-bottom: 40px; /* Espacio después del subtítulo */
+    margin-bottom: 40px;
 }
 
-/* Contenedor de la cuadrícula de habilidades */
 .skills-grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); /* Columnas responsivas */
-    gap: 25px; /* Espacio entre las tarjetas de habilidad */
-    background-color: var(--card-bg-color); /* Fondo blanco de la tarjeta principal */
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 25px;
+    background-color: var(--card-bg-color);
     padding: 30px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
-    justify-items: center; /* Centra los items dentro de la cuadrícula */
+    justify-items: center;
 }
 
-/* Tarjeta individual de habilidad */
 .skill-card {
     display: flex;
     flex-direction: column;
@@ -237,37 +529,35 @@ body {
     justify-content: center;
     padding: 20px;
     border-radius: var(--border-radius);
-    background-color: #f9f9f9; /* Fondo muy ligero para la tarjeta */
-    border: 1px solid #eee; /* Borde muy sutil */
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
     transition: transform var(--transition-speed), box-shadow var(--transition-speed);
     text-align: center;
-    width: 100px; /* Ancho fijo para cada tarjeta */
-    height: 100px; /* Alto fijo para cada tarjeta, mantenerlos cuadrados */
+    width: 100px;
+    height: 100px;
 }
 
 .skill-card:hover {
-    transform: translateY(-5px); /* Efecto de levantamiento al pasar el ratón */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada al pasar el ratón */
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .skill-card i {
-    font-size: 3.5em; /* Tamaño grande para los iconos */
+    font-size: 3.5em;
     margin-bottom: 10px;
-    line-height: 1; /* Ajustar línea para que no haya espacio extra */
+    line-height: 1;
 }
 
-/* Ajustes específicos para algunos iconos de Devicon si son demasiado grandes o pequeños */
 .devicon-nodejs-plain,
 .devicon-figma-plain {
-    font-size: 3.2em; /* Ligeramente más pequeños para que encajen bien */
+    font-size: 3.2em;
 }
-
 
 .skill-card span {
     font-size: 0.95em;
     font-weight: 600;
     color: var(--primary-text-color);
-    white-space: nowrap; /* Evita que el nombre se rompa en varias líneas */
+    white-space: nowrap;
 }
 
 
@@ -277,7 +567,7 @@ body {
     padding: 20px;
     color: var(--secondary-text-color);
     font-size: 0.9em;
-    margin-top: auto; /* Empuja el footer al final de la página */
+    margin-top: auto;
     width: 100%;
 }
 
@@ -285,44 +575,95 @@ body {
     font-weight: 600;
 }
 
-/* Media Queries para Responsividad */
+/* --- Media Queries para Responsividad --- */
+@media (max-width: 992px) {
+    .tools-grid-container {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* 2 columnas en tablet */
+        gap: 25px;
+        padding: 30px;
+    }
+    .color-palette-module {
+        grid-column: span 1; /* En tablet, que no ocupe 2 columnas */
+    }
+    .color-box {
+        width: 120px;
+        height: 160px;
+    }
+}
+
 @media (max-width: 768px) {
     .header-section h1 {
         font-size: 2.2em;
     }
-
     .header-section p {
         font-size: 1em;
     }
-
-    .generate-btn {
+    .generate-btn, .action-btn, .explore-btn {
         padding: 12px 25px;
         font-size: 1em;
     }
 
-    .color-palette-container {
+    .tools-grid-container {
+        grid-template-columns: 1fr; /* Una columna en móvil */
+        gap: 20px;
         padding: 20px;
-        width: 95%; /* Ocupa más ancho en móviles */
-        gap: 15px;
+        width: 95%;
     }
-
+    .tool-module {
+        padding: 20px;
+    }
+    .module-title {
+        font-size: 1.4em;
+    }
+    
+    .color-palette-module {
+        grid-column: auto; /* Quita el span para una sola columna */
+    }
     .color-box {
-        width: 140px; /* Ligeramente más pequeños en móviles */
-        height: 180px;
-        font-size: 1em;
+        width: 100%; /* Ocupa el 100% del espacio disponible */
+        max-width: 140px; /* Para que no se estire demasiado si hay mucho espacio */
+        height: 150px;
     }
-
     .palette-type-controls {
-        flex-direction: column; /* Apila los botones de tipo */
-        gap: 10px;
-        width: 80%;
+        flex-direction: column;
+        gap: 8px;
     }
-
     .type-btn {
-        width: 100%; /* Botones de tipo ocupan todo el ancho */
+        width: 100%;
+        font-size: 0.85em;
     }
 
-    /* Media Queries para Responsividad de la sección de habilidades */
+    .daily-tool-card .tool-icon {
+        font-size: 4em;
+    }
+    .daily-tool-card h4 {
+        font-size: 1.2em;
+    }
+
+    .converter-input-group label {
+        flex-basis: 25%;
+    }
+    .converter-input-group input {
+        font-size: 0.9em;
+        padding: 8px 12px;
+    }
+
+    #json-input, .json-output-area {
+        min-height: 150px;
+        font-size: 0.85em;
+    }
+    .json-buttons .action-btn {
+        padding: 8px 20px;
+        font-size: 0.85em;
+    }
+
+    .control-group input[type="number"],
+    .control-group select {
+        padding: 6px 10px;
+        font-size: 0.9em;
+    }
+
+    /* Skills section responsiveness */
     .skills-section h2 {
         font-size: 2em;
     }
@@ -330,7 +671,7 @@ body {
         font-size: 0.95em;
     }
     .skills-grid-container {
-        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); /* Más pequeñas en tablet */
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
         gap: 20px;
         padding: 20px;
     }
@@ -348,22 +689,43 @@ body {
     .header-section h1 {
         font-size: 1.8em;
     }
-
-    .color-box {
-        width: 120px; /* Aún más pequeños */
-        height: 160px;
-        padding: 10px;
+    .generate-btn, .action-btn, .explore-btn {
+        padding: 10px 20px;
+        font-size: 0.9em;
     }
 
-    .color-palette-container {
-        gap: 10px;
+    .tool-module {
+        padding: 15px;
+    }
+    .module-title {
+        font-size: 1.2em;
     }
 
+    .daily-tool-card .tool-icon {
+        font-size: 3em;
+    }
+    .daily-tool-card h4 {
+        font-size: 1em;
+    }
+    .daily-tool-card p {
+        font-size: 0.8em;
+    }
+
+    .converter-input-group label {
+        flex-basis: 20%;
+    }
+
+    #json-input, .json-output-area {
+        min-height: 120px;
+        font-size: 0.8em;
+    }
+
+    /* Skills section responsiveness */
     .skills-section h2 {
         font-size: 1.8em;
     }
     .skills-grid-container {
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Aún más pequeñas en móvil */
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
         gap: 15px;
         padding: 15px;
     }
