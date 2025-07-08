@@ -10,63 +10,114 @@ const footerText = document.querySelector('.footer-section p');
 const NUM_COLORS = 5; // Número de colores en la paleta
 let currentPalette = []; // Almacena los colores actuales de la paleta
 let lockedColors = new Array(NUM_COLORS).fill(false); // Estado de bloqueo para cada color
-let activePaletteType = 'random'; // Tipo de paleta activa (por defecto 'random' si no se selecciona nada)
+let activePaletteType = 'random'; // Tipo de paleta activa (por defecto 'random')
+let baseColor = null; // Color base para generar paletas armónicas
 
-// --- 3. Funciones de Utilidad de Color ---
+// --- 3. Funciones de Utilidad de Color (con chroma.js) ---
 
-// Función para generar un color HEX aleatorio
+// Función para obtener un color HEX aleatorio
 function getRandomHexColor() {
-    return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+    return chroma.random().hex();
 }
 
-// Función para convertir HEX a RGB
-function hexToRgb(hex) {
-    let r = 0, g = 0, b = 0;
-    // Manejar formato corto (e.g., #FFF)
-    if (hex.length === 4) {
-        r = parseInt(hex[1] + hex[1], 16);
-        g = parseInt(hex[2] + hex[2], 16);
-        b = parseInt(hex[3] + hex[3], 16);
-    } else if (hex.length === 7) {
-        r = parseInt(hex.substring(1, 3), 16);
-        g = parseInt(hex.substring(3, 5), 16);
-        b = parseInt(hex.substring(5, 7), 16);
-    }
-    return { r, g, b };
-}
-
-// Función para calcular la luminosidad de un color (para determinar si el texto debe ser blanco o negro)
-function getLuminance(hex) {
-    const { r, g, b } = hexToRgb(hex);
-    // Fórmula de luminosidad relativa (perceptual)
-    const a = [r, g, b].map(v => {
-        v /= 255;
-        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-    });
-    return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
-}
-
-// Función para obtener el color de texto de contraste (blanco o negro)
+// Función para obtener el color de texto de contraste (blanco o negro) usando chroma.js
 function getContrastTextColor(hex) {
-    return getLuminance(hex) > 0.5 ? '#333' : '#FFF'; // Si es claro, texto oscuro; si es oscuro, texto claro
+    // Usamos el umbral 0.5 para la luminosidad, pero 0.43 a veces es mejor para el texto oscuro sobre fondo claro
+    return chroma(hex).luminance() > 0.43 ? '#333' : '#FFF'; 
 }
 
-// --- 4. Funciones de Renderizado y Lógica Principal ---
+// --- 4. Lógica de Generación de Paletas Armónicas (usando chroma.js) ---
 
-// Función para generar una paleta de colores (inicialmente aleatoria)
+function generateHarmonicPalette(type, color) {
+    let colors = [];
+    let base = chroma(color);
+
+    switch (type) {
+        case 'monochromatic':
+            // Genera una gama de tonos del mismo color, ajustando la luminosidad
+            colors = chroma.scale([base.darken(2), base, base.brighten(2)])
+                           .mode('lch') // Usa el modo LCH para transiciones más suaves
+                           .colors(NUM_COLORS);
+            break;
+        case 'analogous':
+            // Colores adyacentes en la rueda de color (60 grados de diferencia en total)
+            // Generamos 3 principales y 2 variaciones de brillo/oscuridad
+            const h1 = base.hsl()[0];
+            colors.push(base.hex()); // Color base
+            colors.push(base.set('hsl.h', (h1 + 30) % 360).hex()); // +30 grados
+            colors.push(base.set('hsl.h', (h1 - 30 + 360) % 360).hex()); // -30 grados
+            
+            // Añadir variaciones de luminosidad
+            colors.push(chroma(colors[1]).darken(0.5).hex());
+            colors.push(chroma(colors[2]).brighten(0.5).hex());
+            break;
+        case 'complementary':
+            // Colores opuestos en la rueda de color
+            const hComp = base.hsl()[0];
+            colors.push(base.hex()); // Color base
+            colors.push(base.set('hsl.h', (hComp + 180) % 360).hex()); // Complementario
+            
+            // Añadir variaciones de luminosidad
+            colors.push(base.brighten(1).hex());
+            colors.push(base.darken(1).hex());
+            colors.push(chroma(colors[1]).brighten(0.5).hex()); // Complementario más claro
+            break;
+        case 'triadic':
+            // Tres colores equidistantes en la rueda (120 grados de diferencia)
+            const hTriad = base.hsl()[0];
+            colors.push(base.hex()); // Color base
+            colors.push(base.set('hsl.h', (hTriad + 120) % 360).hex()); // Triádico 1
+            colors.push(base.set('hsl.h', (hTriad + 240) % 360).hex()); // Triádico 2
+
+            // Añadir variaciones de luminosidad
+            colors.push(chroma(colors[1]).darken(0.5).hex());
+            colors.push(chroma(colors[2]).brighten(0.5).hex());
+            break;
+        default: // 'random'
+            for (let i = 0; i < NUM_COLORS; i++) {
+                colors.push(getRandomHexColor());
+            }
+            break;
+    }
+    // Asegurarse de que siempre haya NUM_COLORS colores y cortar/rellenar si es necesario
+    while (colors.length < NUM_COLORS) {
+        colors.push(getRandomHexColor()); // Rellenar con aleatorios si no hay suficientes
+    }
+    return colors.slice(0, NUM_COLORS); // Cortar si se generaron demasiados
+}
+
+
+// --- 5. Funciones de Renderizado y Lógica Principal ---
+
+// Función para generar y mostrar la paleta de colores
 function generatePalette() {
     colorPaletteContainer.innerHTML = ''; // Limpiar paleta anterior
 
+    // Si no hay un color base (primera carga o tipo aleatorio), elige uno.
+    // O si todos los colores están desbloqueados y el tipo es armónico, elige un nuevo baseColor.
+    if (!baseColor || activePaletteType === 'random' || lockedColors.every(l => !l)) {
+        baseColor = getRandomHexColor();
+    }
+    
+    let newColors = [];
+
+    // Generar la paleta según el tipo activo
+    if (activePaletteType === 'random') {
+        for (let i = 0; i < NUM_COLORS; i++) {
+            newColors.push(getRandomHexColor());
+        }
+    } else {
+        // Generar una paleta armónica con el baseColor
+        newColors = generateHarmonicPalette(activePaletteType, baseColor);
+    }
+
+    // Aplicar los colores, respetando los bloqueados
     for (let i = 0; i < NUM_COLORS; i++) {
         let color;
         if (lockedColors[i] && currentPalette[i]) {
             color = currentPalette[i]; // Mantener el color bloqueado
         } else {
-            // Aquí es donde la lógica para tipos de paleta se volvería más compleja.
-            // Por ahora, solo generamos colores aleatorios.
-            // Para "monocromática", "análoga", etc., se necesitaría una librería como 'chroma.js'
-            // o funciones matemáticas de teoría del color.
-            color = getRandomHexColor();
+            color = newColors[i]; // Usar el color generado o aleatorio
         }
         currentPalette[i] = color; // Actualizar el color en la paleta actual
 
@@ -75,9 +126,13 @@ function generatePalette() {
         const colorBox = document.createElement('div');
         colorBox.classList.add('color-box');
         colorBox.style.backgroundColor = color;
-        // Establecer el estado de bloqueo para el CSS
+        
+        // Establecer el estado de bloqueo para el CSS y el data-attribute
         if (lockedColors[i]) {
             colorBox.classList.add('locked');
+            colorBox.setAttribute('data-locked', 'true');
+        } else {
+            colorBox.setAttribute('data-locked', 'false');
         }
 
         colorBox.innerHTML = `
@@ -102,21 +157,24 @@ function generatePalette() {
                 }, 1000);
             }).catch(err => {
                 console.error('Error al copiar el texto: ', err);
+                alert('No se pudo copiar el color. Por favor, intente de nuevo.');
             });
         });
 
         // Bloquear/Desbloquear color
         lockIcon.addEventListener('click', () => {
-            lockedColors[i] = !lockedColors[i]; // Invertir el estado de bloqueo
-            colorBox.classList.toggle('locked', lockedColors[i]); // Añadir/Quitar clase CSS
-            lockIcon.classList.toggle('fa-lock', lockedColors[i]);
-            lockIcon.classList.toggle('fa-lock-open', !lockedColors[i]);
-            console.log(`Color ${color} ${lockedColors[i] ? 'bloqueado' : 'desbloqueado'}`);
+            const index = Array.from(colorPaletteContainer.children).indexOf(colorBox); // Obtener el índice del colorBox
+            lockedColors[index] = !lockedColors[index]; // Invertir el estado de bloqueo
+            colorBox.classList.toggle('locked', lockedColors[index]); // Añadir/Quitar clase CSS
+            colorBox.setAttribute('data-locked', lockedColors[index]); // Actualizar data-attribute
+            lockIcon.classList.toggle('fa-lock', lockedColors[index]);
+            lockIcon.classList.toggle('fa-lock-open', !lockedColors[index]);
+            console.log(`Color ${color} ${lockedColors[index] ? 'bloqueado' : 'desbloqueado'}`);
         });
     }
 }
 
-// --- 5. Event Listeners Globales ---
+// --- 6. Event Listeners Globales ---
 
 // Botón de Generar Paleta
 generateBtn.addEventListener('click', generatePalette);
@@ -129,21 +187,28 @@ typeButtons.forEach(button => {
         // Añadir 'active' al clickeado
         button.classList.add('active');
         activePaletteType = button.dataset.type; // Obtener el tipo de paleta del atributo data
-        console.log(`Tipo de paleta seleccionado: ${activePaletteType}`);
 
-        // AQUI: Si tuvieras la lógica para generar diferentes tipos de paletas,
-        // llamarías a una función específica aquí, o pasarías 'activePaletteType'
-        // a 'generatePalette()' para que se encargara.
-        // Por ahora, solo genera aleatoriamente, independientemente del tipo seleccionado.
+        // Si se cambia el tipo de paleta, se recomienda desbloquear todos los colores
+        // y generar una nueva paleta desde cero con el nuevo tipo.
+        lockedColors.fill(false); // Desbloquear todos los colores
+        
+        // Si el tipo no es 'random', elegimos un nuevo color base
+        if (activePaletteType !== 'random') {
+            baseColor = getRandomHexColor();
+        } else {
+            baseColor = null; // Reiniciar baseColor para tipo aleatorio
+        }
+
+        console.log(`Tipo de paleta seleccionado: ${activePaletteType}`);
         generatePalette();
     });
 });
 
-// --- 6. Inicialización ---
+// --- 7. Inicialización ---
 
 // Cargar una paleta inicial al cargar la página
 window.onload = () => {
+    // Establecer el texto del footer con tu nombre
+    footerText.innerHTML = 'Hecho por <strong>Saúl Hernández</strong>'; 
     generatePalette();
-    // Actualizar el texto del footer (cambiar "OpenAI" por tu nombre)
-    footerText.innerHTML = 'Hecho por <strong>Tu Nombre</strong>'; // <--- ¡IMPORTANTE! Cambia "Tu Nombre"
 };
