@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevTools Central - Saúl Hernández</title> <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>DevTools Central - Saúl Hernández</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -24,7 +25,8 @@
         
         <div class="tool-module color-palette-module">
             <h3 class="module-title">Generador de Paletas de Colores UI</h3>
-            <div class="color-palette-content"> <div class="color-palette-display">
+            <div class="color-palette-content">
+                <div class="color-palette-display">
                     </div>
                 <div class="palette-type-controls">
                     <button class="type-btn active" data-type="random">Aleatoria</button>
@@ -39,7 +41,8 @@
         <div class="tool-module daily-tool-module">
             <h3 class="module-title">Herramienta del Día</h3>
             <div class="daily-tool-card">
-                <i class="fab fa-codepen tool-icon"></i> <h4>CodePen</h4>
+                <i class="fab fa-codepen tool-icon"></i>
+                <h4>CodePen</h4>
                 <p>Entorno de desarrollo social para front-end.</p>
                 <a href="https://codepen.io/" target="_blank" class="explore-btn">Explorar</a>
             </div>
@@ -77,7 +80,8 @@
                 <button class="action-btn" id="format-json-btn">Formatear</button>
                 <button class="action-btn" id="validate-json-btn">Validar</button>
             </div>
-            <pre id="json-output" class="json-output-area"></pre> </div>
+            <pre id="json-output" class="json-output-area"></pre>
+        </div>
 
         <div class="tool-module css-animator-module">
             <h3 class="module-title">Animador de Fondos CSS</h3>
@@ -108,7 +112,80 @@
             </div>
             <div class="animated-bg-preview" style="background: linear-gradient(120deg, #42a5f5, #0d47a1);"></div>
             <button class="action-btn" id="generate-css-code-btn">Generar Código CSS</button>
-            <pre id="css-output" class="json-output-area"></pre> </div>
+            <pre id="css-output" class="json-output-area"></pre>
+        </div>
+
+        <div class="tool-module algorithm-visualizer-module">
+            <h3 class="module-title">Visualizador de Algoritmos Básicos</h3>
+            <div class="algorithm-controls">
+                <div class="control-group">
+                    <label for="array-size">Tamaño del Array:</label>
+                    <input type="range" id="array-size" min="5" max="50" value="20">
+                </div>
+                <button class="action-btn" id="generate-array-btn">Generar Array Aleatorio</button>
+                <button class="action-btn" id="sort-array-btn" data-algorithm="bubble">Ordenar (Burbuja)</button>
+                </div>
+            <div class="algorithm-display">
+                </div>
+            <p class="comparison-count">Número de Comparaciones: <span id="comparison-counter">0</span></p>
+        </div>
+
+        <div class="tool-module svg-wave-generator-module">
+            <h3 class="module-title">Generador de Ondas SVG</h3>
+            <div class="wave-controls">
+                <div class="control-group">
+                    <label for="wave-height">Altura de Onda:</label>
+                    <input type="range" id="wave-height" min="20" max="200" value="80">
+                </div>
+                <div class="control-group">
+                    <label for="wave-count">Número de Ondas:</label>
+                    <input type="range" id="wave-count" min="1" max="10" value="3">
+                </div>
+                <div class="control-group">
+                    <label for="wave-amplitude">Amplitud:</label>
+                    <input type="range" id="wave-amplitude" min="10" max="100" value="50">
+                </div>
+                <div class="control-group">
+                    <label for="wave-color1">Color 1:</label>
+                    <input type="color" id="wave-color1" value="#4CBSEE6">
+                </div>
+                <div class="control-group">
+                    <label for="wave-color2">Color 2:</label>
+                    <input type="color" id="wave-color2" value="#E754BB">
+                </div>
+                <button class="action-btn" id="invert-wave-btn">Invertir Onda</button>
+            </div>
+            <div class="wave-preview">
+                <svg id="svg-wave-display" width="100%" height="200" viewBox="0 0 800 200" preserveAspectRatio="none">
+                    <path fill="url(#waveGradient)" d="M0,100 Q200,50 400,100 T800,100 V200 H0 Z"></path>
+                    <defs>
+                        <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#4CBSEE6" />
+                            <stop offset="100%" style="stop-color:#E754BB" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <button class="action-btn" id="generate-svg-code-btn">Generar Código SVG</button>
+            <pre id="svg-output" class="json-output-area"></pre>
+        </div>
+
+        <div class="tool-module dom-event-simulator-module">
+            <h3 class="module-title">Simulador de Eventos DOM</h3>
+            <div class="dom-elements-container">
+                <div class="dom-element" id="parent-div">Padre
+                    <div class="dom-element" id="child-div">Hijo
+                        <div class="dom-element" id="grandchild-div">Nieto</div>
+                    </div>
+                </div>
+            </div>
+            <div class="dom-controls">
+                <button class="action-btn toggle-mode-btn" data-mode="capture">Modo Captura</button>
+                <button class="action-btn toggle-mode-btn active" data-mode="bubble">Modo Burbujeo</button>
+                <button class="action-btn" id="clear-dom-logs-btn">Borrar Logs</button>
+            </div>
+            <pre id="dom-logs" class="json-output-area dom-logs-area"></pre>
+        </div>
 
     </main>
 
