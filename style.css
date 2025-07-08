@@ -163,9 +163,12 @@ body {
 .palette-type-controls {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center; /* Centra los botones */
     gap: 15px; /* Espacio entre los botones de tipo */
     margin-top: 20px;
-    margin-bottom: 60px; /* Espacio antes del footer */
+    margin-bottom: 60px; /* Espacio antes de la sección de habilidades */
+    width: 90%;
+    max-width: 1000px;
 }
 
 .type-btn {
@@ -191,6 +194,82 @@ body {
     border-color: var(--button-bg-color);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
+/* --- NUEVA SECCIÓN: Mis Habilidades Técnicas --- */
+.skills-section {
+    text-align: center;
+    padding: 60px 20px; /* Padding para separar de las otras secciones */
+    margin-bottom: 40px; /* Espacio antes del footer */
+    width: 90%;
+    max-width: 1000px;
+}
+
+.skills-section h2 {
+    font-size: 2.5em; /* Ligeramente más pequeño que el título principal */
+    font-weight: 700;
+    color: var(--primary-text-color);
+    margin-bottom: 10px;
+}
+
+.skills-section .skills-subtitle {
+    font-size: 1.1em;
+    color: var(--secondary-text-color);
+    margin-bottom: 40px; /* Espacio después del subtítulo */
+}
+
+/* Contenedor de la cuadrícula de habilidades */
+.skills-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); /* Columnas responsivas */
+    gap: 25px; /* Espacio entre las tarjetas de habilidad */
+    background-color: var(--card-bg-color); /* Fondo blanco de la tarjeta principal */
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    justify-items: center; /* Centra los items dentro de la cuadrícula */
+}
+
+/* Tarjeta individual de habilidad */
+.skill-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    background-color: #f9f9f9; /* Fondo muy ligero para la tarjeta */
+    border: 1px solid #eee; /* Borde muy sutil */
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    text-align: center;
+    width: 100px; /* Ancho fijo para cada tarjeta */
+    height: 100px; /* Alto fijo para cada tarjeta, mantenerlos cuadrados */
+}
+
+.skill-card:hover {
+    transform: translateY(-5px); /* Efecto de levantamiento al pasar el ratón */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada al pasar el ratón */
+}
+
+.skill-card i {
+    font-size: 3.5em; /* Tamaño grande para los iconos */
+    margin-bottom: 10px;
+    line-height: 1; /* Ajustar línea para que no haya espacio extra */
+}
+
+/* Ajustes específicos para algunos iconos de Devicon si son demasiado grandes o pequeños */
+.devicon-nodejs-plain,
+.devicon-figma-plain {
+    font-size: 3.2em; /* Ligeramente más pequeños para que encajen bien */
+}
+
+
+.skill-card span {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: var(--primary-text-color);
+    white-space: nowrap; /* Evita que el nombre se rompa en varias líneas */
+}
+
 
 /* Pie de página (Footer) */
 .footer-section {
@@ -242,6 +321,27 @@ body {
     .type-btn {
         width: 100%; /* Botones de tipo ocupan todo el ancho */
     }
+
+    /* Media Queries para Responsividad de la sección de habilidades */
+    .skills-section h2 {
+        font-size: 2em;
+    }
+    .skills-section .skills-subtitle {
+        font-size: 0.95em;
+    }
+    .skills-grid-container {
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); /* Más pequeñas en tablet */
+        gap: 20px;
+        padding: 20px;
+    }
+    .skill-card {
+        width: 90px;
+        height: 90px;
+        padding: 15px;
+    }
+    .skill-card i {
+        font-size: 3em;
+    }
 }
 
 @media (max-width: 480px) {
@@ -257,5 +357,26 @@ body {
 
     .color-palette-container {
         gap: 10px;
+    }
+
+    .skills-section h2 {
+        font-size: 1.8em;
+    }
+    .skills-grid-container {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Aún más pequeñas en móvil */
+        gap: 15px;
+        padding: 15px;
+    }
+    .skill-card {
+        width: 70px;
+        height: 70px;
+        padding: 10px;
+    }
+    .skill-card i {
+        font-size: 2.5em;
+        margin-bottom: 5px;
+    }
+    .skill-card span {
+        font-size: 0.8em;
     }
 }
