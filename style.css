@@ -1,316 +1,261 @@
-/* Paleta de colores */
+/* style.css */
+
+/* Variables CSS para colores y fuentes para facilitar la gestión */
 :root {
-    --bg-color: #f4f7f6; /* Fondo muy claro */
-    --container-bg: #ffffff; /* Fondo del contenedor principal */
-    --header-bg: #6a057e; /* Morado oscuro para el encabezado */
-    --input-bg: #f9f9f9;
-    --text-color: #333333; /* Texto oscuro */
-    --text-muted: #6c757d; /* Texto secundario */
-    --accent-color: #4CAF50; /* Verde vibrante para acentos (completado) */
-    --accent-hover: #45a049;
-    --btn-primary-bg: #88399e; /* Morado para botones */
-    --btn-primary-hover: #722f8a;
-    --border-color: #e0e0e0;
-    --shadow-light: rgba(0, 0, 0, 0.08);
+    --primary-text-color: #333;
+    --secondary-text-color: #666;
+    --button-bg-color: #2b2d42; /* Azul oscuro del diseño */
+    --button-text-color: #ffffff;
+    --card-bg-color: #ffffff;
+    --border-radius: 12px;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Sombra más suave */
+    --transition-speed: 0.3s ease;
+    --gradient-start: #FFD4EE; /* Rosa claro del fondo */
+    --gradient-middle: #D0E4FF; /* Azul claro del fondo */
+    --gradient-end: #FFF7D4; /* Amarillo claro del fondo */
 }
 
-/* Base y tipografía */
+/* Estilos globales y reseteo básico */
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Poppins', sans-serif; /* Usamos la fuente de Google Fonts */
     margin: 0;
-    padding: 20px; /* Padding para que no esté pegado a los bordes */
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    font-size: 16px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    box-sizing: border-box; /* Incluir padding en el tamaño total */
-}
-
-h1, h2 {
-    font-family: 'Poppins', sans-serif;
-    margin-top: 0;
-}
-
-/* Contenedor principal de la app */
-.todo-app-container {
-    background-color: var(--container-bg);
-    border-radius: 12px;
-    box-shadow: 0 10px 30px var(--shadow-light);
-    width: 90%;
-    max-width: 500px;
-    overflow: hidden; /* Para los bordes redondeados */
-}
-
-/* Encabezado */
-.app-header {
-    background-color: var(--header-bg);
-    color: #ffffff;
-    padding: 25px 20px;
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-.app-header h1 {
-    font-size: 2em;
-    font-weight: 700;
-}
-
-/* Sección de Input de Tareas */
-.task-input-section {
-    display: flex;
-    padding: 20px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-#new-task-input {
-    flex-grow: 1;
-    padding: 12px 15px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 1em;
-    outline: none;
-    transition: border-color 0.3s ease;
-    margin-right: 10px;
-}
-
-#new-task-input::placeholder {
-    color: var(--text-muted);
-}
-
-#new-task-input:focus {
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2); /* Sombra suave para el enfoque */
-}
-
-#add-task-btn {
-    background-color: var(--btn-primary-bg);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    width: 45px;
-    height: 45px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    font-size: 1.5em;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-#add-task-btn:hover {
-    background-color: var(--btn-primary-hover);
-    transform: translateY(-2px);
-}
-
-/* Sección de Filtros */
-.task-filter-section {
-    display: flex;
-    justify-content: space-around;
-    padding: 15px 20px;
-    background-color: var(--input-bg);
-    border-bottom: 1px solid var(--border-color);
-}
-
-.filter-btn {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    font-size: 0.95em;
-    font-weight: 600;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.filter-btn:hover:not(.active) {
-    color: var(--text-color);
-    background-color: var(--border-color);
-}
-
-.filter-btn.active {
-    color: var(--btn-primary-bg);
-    background-color: #e6e6fa; /* Un lila muy suave */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-/* Sección de Lista de Tareas */
-.task-list-section {
-    padding: 0 20px;
-}
-
-#task-list {
-    list-style: none;
     padding: 0;
-    margin: 0;
-}
-
-.task-item {
+    box-sizing: border-box;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    padding: 15px 0;
-    border-bottom: 1px dashed var(--border-color);
-    transition: background-color 0.3s ease;
+    min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+    background-color: #f0f2f5; /* Un gris muy suave para el fondo general */
+    color: var(--primary-text-color);
+    position: relative; /* Para posicionar el gradiente de fondo */
+    overflow-x: hidden; /* Evita scroll horizontal no deseado */
 }
 
-.task-item:last-child {
-    border-bottom: none; /* Elimina el borde de la última tarea */
-}
-
-.task-item.completed .task-text {
-    text-decoration: line-through;
-    color: var(--text-muted);
-}
-
-.task-checkbox {
-    margin-right: 15px;
-    cursor: pointer;
-    position: relative; /* Para el custom checkbox */
-    width: 20px;
-    height: 20px;
-    min-width: 20px; /* Para que no se encoja */
-    min-height: 20px;
-    -webkit-appearance: none; /* Oculta el checkbox nativo */
-    appearance: none;
-    border: 2px solid var(--btn-primary-bg);
-    border-radius: 50%;
-    outline: none;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.task-checkbox:checked {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
-}
-
-.task-checkbox:checked::after {
-    content: 'check'; /* Icono de Material Icons */
-    font-family: 'Material Icons';
-    color: #fff;
-    font-size: 14px;
+/* Fondo degradado abstracto, posicionado y desenfocado */
+.background-gradient {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 350px; /* Ajusta la altura del gradiente */
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
+    filter: blur(80px); /* Desenfoque para un efecto suave */
+    opacity: 0.8;
+    z-index: -1; /* Envía el gradiente al fondo */
+    border-bottom-left-radius: 50% 20%; /* Curvatura inferior izquierda */
+    border-bottom-right-radius: 50% 20%; /* Curvatura inferior derecha */
 }
 
 
-.task-text {
-    flex-grow: 1;
-    font-size: 1.1em;
-    color: var(--text-color);
-    word-break: break-word; /* Rompe palabras largas */
-    margin-right: 10px;
+/* Sección del encabezado (Header) */
+.header-section {
+    text-align: center;
+    padding: 60px 20px 40px; /* Más padding arriba y abajo */
+    margin-bottom: 30px;
+    position: relative; /* Para asegurar que esté por encima del gradiente */
+    z-index: 1;
 }
 
-.task-actions {
-    display: flex;
-    gap: 5px;
+.header-section h1 {
+    font-size: 3em; /* Más grande para el título principal */
+    font-weight: 700; /* Negrita */
+    margin-bottom: 15px;
+    color: var(--primary-text-color);
+    line-height: 1.2;
 }
 
-.task-actions button {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
+.header-section p {
     font-size: 1.2em;
-    padding: 5px;
-    border-radius: 50%;
-    transition: color 0.3s ease, background-color 0.3s ease;
-    display: flex; /* Para centrar el icono */
-    align-items: center;
-    justify-content: center;
+    color: var(--secondary-text-color);
+    max-width: 600px;
+    margin: 0 auto 30px; /* Centra el párrafo y añade margen inferior */
 }
 
-.task-actions button:hover {
-    color: var(--accent-color);
-    background-color: var(--border-color);
+/* Botón Generar Nueva Paleta */
+.generate-btn {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: none;
+    padding: 15px 35px;
+    border-radius: var(--border-radius);
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Sombra para el botón */
 }
 
-.task-actions .delete-btn:hover {
-    color: var(--error-color);
+.generate-btn:hover {
+    transform: translateY(-3px); /* Pequeño efecto al pasar el ratón */
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Pie de página */
-.app-footer {
+/* Contenedor principal de la paleta de colores */
+.color-palette-container {
     display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+    justify-content: center;
+    gap: 25px; /* Espacio entre los bloques de color */
+    background-color: var(--card-bg-color); /* Fondo blanco de la tarjeta principal */
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    max-width: 1000px; /* Ancho máximo del contenedor de la paleta */
+    width: 90%; /* Ocupa el 90% del ancho disponible */
+    margin-top: 20px; /* Margen superior para separarlo del botón */
+    margin-bottom: 40px; /* Margen inferior para separarlo de los botones de tipo */
+}
+
+/* Estilos para cada bloque de color individual */
+.color-box {
+    width: 160px; /* Ancho fijo para cada tarjeta de color */
+    height: 200px; /* Alto fijo */
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
-    border-top: 1px solid var(--border-color);
-    background-color: var(--input-bg);
-}
-
-#tasks-count {
-    font-size: 0.9em;
-    color: var(--text-muted);
+    padding: 15px;
+    color: #fff; /* Color del texto dentro del cuadro (se ajustará con JS para contraste) */
     font-weight: 600;
+    font-size: 1.1em;
+    cursor: pointer; /* Indica que es interactivo */
+    transition: transform var(--transition-speed); /* Transición para el hover */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Sombra ligera para los bloques de color */
+    position: relative; /* Para posicionar el icono del candado */
 }
 
-#clear-completed-btn {
-    background-color: var(--error-color);
-    color: #ffffff;
-    border: none;
+.color-box:hover {
+    transform: translateY(-5px); /* Pequeño levantamiento al pasar el ratón */
+}
+
+/* Estilos para el código HEX dentro del bloque de color */
+.color-box .hex-code {
+    background-color: rgba(0, 0, 0, 0.2); /* Fondo semitransparente para el texto HEX */
+    padding: 8px 12px;
     border-radius: 8px;
-    padding: 8px 15px;
-    font-size: 0.9em;
-    font-weight: 600;
+    user-select: none; /* Evita que el texto sea seleccionable */
+    margin-top: auto; /* Empuja el hex-code hacia abajo */
+    margin-bottom: 10px; /* Espacio para el candado */
+}
+
+/* Icono de candado */
+.color-box .lock-icon {
+    font-size: 1.3em;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: auto; /* Empuja el candado hacia abajo si el hex-code no está */
+    margin-bottom: 5px;
+    color: rgba(255, 255, 255, 0.7); /* Color por defecto del candado */
+    transition: color var(--transition-speed);
 }
 
-#clear-completed-btn:hover {
-    background-color: #c0392b;
-    transform: translateY(-2px);
+.color-box .lock-icon:hover {
+    color: rgba(255, 255, 255, 1); /* Se ilumina al pasar el ratón */
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-    body {
-        padding: 10px;
+/* Estilo para el candado cuando está bloqueado */
+.color-box.locked .lock-icon {
+    color: #fff; /* Candado blanco sólido cuando está bloqueado */
+}
+
+
+/* Controles de tipo de paleta */
+.palette-type-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px; /* Espacio entre los botones de tipo */
+    margin-top: 20px;
+    margin-bottom: 60px; /* Espacio antes del footer */
+}
+
+.type-btn {
+    background-color: #f0f0f0; /* Fondo gris claro */
+    color: var(--secondary-text-color);
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    border-radius: 30px; /* Bordes más redondeados tipo píldora */
+    font-size: 1em;
+    cursor: pointer;
+    transition: all var(--transition-speed);
+    white-space: nowrap; /* Evita que el texto se rompa */
+}
+
+.type-btn:hover {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+}
+
+.type-btn.active {
+    background-color: var(--button-bg-color); /* Color oscuro para el activo */
+    color: var(--button-text-color);
+    border-color: var(--button-bg-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Pie de página (Footer) */
+.footer-section {
+    text-align: center;
+    padding: 20px;
+    color: var(--secondary-text-color);
+    font-size: 0.9em;
+    margin-top: auto; /* Empuja el footer al final de la página */
+    width: 100%;
+}
+
+.footer-section strong {
+    font-weight: 600;
+}
+
+/* Media Queries para Responsividad */
+@media (max-width: 768px) {
+    .header-section h1 {
+        font-size: 2.2em;
     }
-    .todo-app-container {
-        border-radius: 8px;
-        width: 100%;
-    }
-    .app-header h1 {
-        font-size: 1.8em;
-    }
-    .task-input-section {
-        flex-direction: column;
-        gap: 10px;
-    }
-    #new-task-input {
-        margin-right: 0;
-        width: 100%;
-    }
-    #add-task-btn {
-        width: 100%;
-        border-radius: 8px;
-        height: 40px;
-    }
-    .task-filter-section {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-    .filter-btn {
-        flex: 1 1 auto; /* Permite que los botones se expandan */
-        min-width: 90px;
-    }
-    .task-item {
-        padding: 12px 0;
-    }
-    .task-text {
+
+    .header-section p {
         font-size: 1em;
     }
-    .app-footer {
-        flex-direction: column;
+
+    .generate-btn {
+        padding: 12px 25px;
+        font-size: 1em;
+    }
+
+    .color-palette-container {
+        padding: 20px;
+        width: 95%; /* Ocupa más ancho en móviles */
+        gap: 15px;
+    }
+
+    .color-box {
+        width: 140px; /* Ligeramente más pequeños en móviles */
+        height: 180px;
+        font-size: 1em;
+    }
+
+    .palette-type-controls {
+        flex-direction: column; /* Apila los botones de tipo */
+        gap: 10px;
+        width: 80%;
+    }
+
+    .type-btn {
+        width: 100%; /* Botones de tipo ocupan todo el ancho */
+    }
+}
+
+@media (max-width: 480px) {
+    .header-section h1 {
+        font-size: 1.8em;
+    }
+
+    .color-box {
+        width: 120px; /* Aún más pequeños */
+        height: 160px;
+        padding: 10px;
+    }
+
+    .color-palette-container {
         gap: 10px;
     }
 }
