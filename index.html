@@ -3,40 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Tareas | Saul H.</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Generador de Paletas de Colores UI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="todo-app-container">
-        <header class="app-header">
-            <h1>Lista de Tareas</h1>
-        </header>
 
-        <section class="task-input-section">
-            <input type="text" id="new-task-input" placeholder="Añadir una nueva tarea...">
-            <button id="add-task-btn" aria-label="Añadir tarea">
-                <span class="material-icons">add</span>
-            </button>
-        </section>
+    <div class="background-gradient"></div> <header class="header-section">
+        <h1>Generador de Paletas de Colores UI</h1>
+        <p>Crea paletas de colores perfectas para tus proyectos de diseño y desarrollo web.</p>
+        <button id="generatePaletteBtn" class="generate-btn">Generar Nueva Paleta</button>
+    </header>
 
-        <section class="task-filter-section">
-            <button class="filter-btn active" data-filter="all">Todas</button>
-            <button class="filter-btn" data-filter="pending">Pendientes</button>
-            <button class="filter-btn" data-filter="completed">Completadas</button>
-        </section>
+    <main class="color-palette-container">
+        <div class="color-box" data-locked="false">
+            <span class="hex-code">#F9C74F</span>
+            <i class="fas fa-lock-open lock-icon"></i>
+        </div>
+        <div class="color-box" data-locked="false">
+            <span class="hex-code">#90BE6D</span>
+            <i class="fas fa-lock-open lock-icon"></i>
+        </div>
+        <div class="color-box" data-locked="false">
+            <span class="hex-code">#43AAA8B</span>
+            <i class="fas fa-lock-open lock-icon"></i>
+        </div>
+        <div class="color-box" data-locked="false">
+            <span class="hex-code">#577590</span>
+            <i class="fas fa-lock-open lock-icon"></i>
+        </div>
+        <div class="color-box" data-locked="false">
+            <span class="hex-code">#2B2D42</span>
+            <i class="fas fa-lock-open lock-icon"></i>
+        </div>
+    </main>
 
-        <section class="task-list-section">
-            <ul id="task-list">
-                </ul>
-        </section>
-
-        <footer class="app-footer">
-            <p id="tasks-count">0 tareas pendientes</p>
-            <button id="clear-completed-btn">Limpiar Completadas</button>
-        </footer>
+    <div class="palette-type-controls">
+        <button class="type-btn active" data-type="monochromatic">Monocromática</button>
+        <button class="type-btn" data-type="analogous">Análoga</button>
+        <button class="type-btn" data-type="complementary">Complementaria</button>
+        <button class="type-btn" data-type="triadic">Triádica</button>
     </div>
+
+    <footer class="footer-section">
+        <p>Hecho por **Tu Nombre/OpenAI**</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
