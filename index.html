@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Paletas de Colores UI - Saúl Hernández</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>DevTools Central - Saúl Hernández</title> <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -21,55 +20,112 @@
         <button id="generatePaletteBtn" class="generate-btn">Generar Nueva Paleta</button>
     </header>
 
-    <main class="color-palette-container">
-        </main>
+    <main class="tools-grid-container"> 
+        
+        <div class="tool-module color-palette-module">
+            <h3 class="module-title">Generador de Paletas de Colores UI</h3>
+            <div class="color-palette-content"> <div class="color-palette-display">
+                    </div>
+                <div class="palette-type-controls">
+                    <button class="type-btn active" data-type="random">Aleatoria</button>
+                    <button class="type-btn" data-type="monochromatic">Monocromática</button>
+                    <button class="type-btn" data-type="analogous">Análoga</button>
+                    <button class="type-btn" data-type="complementary">Complementaria</button>
+                    <button class="type-btn" data-type="triadic">Triádica</button>
+                </div>
+            </div>
+        </div>
 
-    <div class="palette-type-controls">
-        <button class="type-btn active" data-type="random">Aleatoria</button>
-        <button class="type-btn" data-type="monochromatic">Monocromática</button>
-        <button class="type-btn" data-type="analogous">Análoga</button>
-        <button class="type-btn" data-type="complementary">Complementaria</button>
-        <button class="type-btn" data-type="triadic">Triádica</button>
-    </div>
+        <div class="tool-module daily-tool-module">
+            <h3 class="module-title">Herramienta del Día</h3>
+            <div class="daily-tool-card">
+                <i class="fab fa-codepen tool-icon"></i> <h4>CodePen</h4>
+                <p>Entorno de desarrollo social para front-end.</p>
+                <a href="https://codepen.io/" target="_blank" class="explore-btn">Explorar</a>
+            </div>
+        </div>
+
+        <div class="tool-module css-converter-module">
+            <h3 class="module-title">Conversor de Unidades CSS</h3>
+            <div class="converter-input-group">
+                <label for="px-input">Px:</label>
+                <input type="number" id="px-input" value="16" step="any">
+            </div>
+            <div class="converter-input-group">
+                <label for="rem-input">Rem:</label>
+                <input type="number" id="rem-input" value="1" step="any">
+            </div>
+            <div class="converter-input-group">
+                <label for="em-input">Em:</label>
+                <input type="number" id="em-input" value="1" step="any">
+            </div>
+            <div class="converter-input-group">
+                <label for="vw-input">VW:</label>
+                <input type="number" id="vw-input" step="any">
+            </div>
+            <div class="converter-input-group">
+                <label for="vh-input">VH:</label>
+                <input type="number" id="vh-input" step="any">
+            </div>
+            <button class="action-btn" id="copy-css-units-btn">Copiar Todas</button>
+        </div>
+
+        <div class="tool-module json-tool-module">
+            <h3 class="module-title">Formateador / Validador JSON</h3>
+            <textarea id="json-input" placeholder='Pega tu JSON aquí...' rows="10"></textarea>
+            <div class="json-buttons">
+                <button class="action-btn" id="format-json-btn">Formatear</button>
+                <button class="action-btn" id="validate-json-btn">Validar</button>
+            </div>
+            <pre id="json-output" class="json-output-area"></pre> </div>
+
+        <div class="tool-module css-animator-module">
+            <h3 class="module-title">Animador de Fondos CSS</h3>
+            <div class="animator-controls">
+                <div class="control-group">
+                    <label for="anim-speed">Velocidad:</label>
+                    <input type="number" id="anim-speed" value="5" min="1" max="60">s
+                </div>
+                <div class="control-group">
+                    <label for="anim-angle">Ángulo:</label>
+                    <input type="range" id="anim-angle" min="0" max="360" value="120"> <span id="anim-angle-display">120°</span>
+                </div>
+                <div class="control-group">
+                    <label for="anim-type">Tipo:</label>
+                    <select id="anim-type">
+                        <option value="linear-gradient">Degradado Lineal</option>
+                        <option value="radial-gradient">Degradado Radial</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="color1">Color 1:</label>
+                    <input type="color" id="color1" value="#42a5f5">
+                </div>
+                 <div class="control-group">
+                    <label for="color2">Color 2:</label>
+                    <input type="color" id="color2" value="#0d47a1">
+                </div>
+            </div>
+            <div class="animated-bg-preview" style="background: linear-gradient(120deg, #42a5f5, #0d47a1);"></div>
+            <button class="action-btn" id="generate-css-code-btn">Generar Código CSS</button>
+            <pre id="css-output" class="json-output-area"></pre> </div>
+
+    </main>
 
     <section class="skills-section">
         <h2>Mis Habilidades Técnicas</h2>
         <p class="skills-subtitle">Tecnologías y herramientas que utilizo para construir experiencias web.</p>
         
         <div class="skills-grid-container">
-            <div class="skill-card">
-                <i class="devicon-html5-plain colored"></i>
-                <span>HTML</span>
-            </div>
-            <div class="skill-card">
-                <i class="devicon-css3-plain colored"></i>
-                <span>CSS</span>
-            </div>
-            <div class="skill-card">
-                <i class="devicon-javascript-plain colored"></i>
-                <span>JavaScript</span>
-            </div>
-            <div class="skill-card">
-                <i class="devicon-react-original colored"></i>
-                <span>React</span>
-            </div>
-            <div class="skill-card">
-                <i class="devicon-nodejs-plain colored"></i>
-                <span>Node.js</span>
-            </div>
-            <div class="skill-card">
-                <i class="devicon-python-plain colored"></i>
-                <span>Python</span>
-            </div>
-            <div class="skill-card">
-                <i class="devicon-git-plain colored"></i>
-                <span>Git</span>
-            </div>
-            <div class="skill-card">
-                <i class="devicon-figma-plain colored"></i>
-                <span>Figma</span>
-            </div>
-            </div>
+            <div class="skill-card"><i class="devicon-html5-plain colored"></i><span>HTML</span></div>
+            <div class="skill-card"><i class="devicon-css3-plain colored"></i><span>CSS</span></div>
+            <div class="skill-card"><i class="devicon-javascript-plain colored"></i><span>JavaScript</span></div>
+            <div class="skill-card"><i class="devicon-react-original colored"></i><span>React</span></div>
+            <div class="skill-card"><i class="devicon-nodejs-plain colored"></i><span>Node.js</span></div>
+            <div class="skill-card"><i class="devicon-python-plain colored"></i><span>Python</span></div>
+            <div class="skill-card"><i class="devicon-git-plain colored"></i><span>Git</span></div>
+            <div class="skill-card"><i class="devicon-figma-plain colored"></i><span>Figma</span></div>
+        </div>
     </section>
 
     <footer class="footer-section">
